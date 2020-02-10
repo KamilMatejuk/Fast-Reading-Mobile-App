@@ -21,7 +21,7 @@ public abstract class AbstractTrening extends AppCompatActivity {
 
     TextView textView;
     EditText editText;
-    int time, count, size;
+    int time, rounds, size, width, count;
     boolean waitingForInput = true;
     ArrayList<String> userAnswers = null;
     ArrayList<String> givenNumbers = null;
@@ -39,10 +39,11 @@ public abstract class AbstractTrening extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = getSharedPreferences("db", Context.MODE_PRIVATE);
         time = sharedPreferences.getInt("time", 1000);
-        count = sharedPreferences.getInt("count", 10);
+        rounds = sharedPreferences.getInt("rounds", 10);
         size = sharedPreferences.getInt("size", 2);
+        width = sharedPreferences.getInt("width", 20);
+        count = sharedPreferences.getInt("count", 1);
 
-        //todo dodac pola na szerokosc/rozstaw i ilosc pol(do trzeciego)
 
         countdown();
 
@@ -100,12 +101,11 @@ public abstract class AbstractTrening extends AppCompatActivity {
         new Thread() {
             public void run() {
                 try {
-                    for(int i=0; i<count; i++){
+                    for(int i=0; i<rounds; i++){
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 newText();
-//                                editText.setEnabled(false);
                             }
                         });
                         Thread.sleep(time);
@@ -113,7 +113,6 @@ public abstract class AbstractTrening extends AppCompatActivity {
                             @Override
                             public void run() {
                                 textView.setText(" ");
-//                                editText.setEnabled(true);
                             }
                         });
                         while(waitingForInput){}

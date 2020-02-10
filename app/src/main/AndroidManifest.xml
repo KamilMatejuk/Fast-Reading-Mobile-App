@@ -31,6 +31,14 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".trening.Reflex"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysVisible|adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".trening.Observation"
             android:screenOrientation="landscape"
             android:windowSoftInputMode="stateAlwaysVisible|adjustResize">

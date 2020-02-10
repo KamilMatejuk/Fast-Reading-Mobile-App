@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -12,59 +13,76 @@ import android.widget.Toast;
 
 public class Settings extends AppCompatActivity {
 
-    TextView textView_time;
     EditText editText_time;
-    TextView textView_count;
-    EditText editText_count;
-    TextView textView_size;
+    EditText editText_rounds;
     EditText editText_size;
-    SharedPreferences sharedPreferences;
+    EditText editText_width;
+    EditText editText_count;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings);
 
-        textView_time = findViewById(R.id.textview_time);
-        editText_time = findViewById(R.id.editText_time);
-        textView_count = findViewById(R.id.textView_count);
-        editText_count = findViewById(R.id.editText_count);
-        textView_size = findViewById(R.id.textView_size);
-        editText_size = findViewById(R.id.editText_size);
-
-        sharedPreferences = getSharedPreferences("db", Context.MODE_PRIVATE);
-        editText_time.setHint(String.valueOf(sharedPreferences.getInt("time", 1000)));
-        editText_count.setHint(String.valueOf(sharedPreferences.getInt("count", 10)));
-        editText_size.setHint(String.valueOf(sharedPreferences.getInt("size", 2)));
+        editText_time = initialize("editText_time", "db", "time", 1000);
+        editText_rounds = initialize("editText_rounds", "db", "rounds", 10);
+        editText_size = initialize("editText_size", "db", "size", 2);
+        editText_width = initialize("editText_width", "db", "width", 20);
+        editText_count = initialize("editText_count", "db", "count", 1);
     }
 
     public void save(View view) {
-        try {
-            int timeMin=50, timeMax=2000;
-            int countMin=5, countMax=20;
-            int sizeMin=1, sizeMax=10;
+        int time = getValue(editText_time);
+        int rounds = getValue(editText_rounds);
+        int size = getValue(editText_size);
+        int width = getValue(editText_width);
+        int count = getValue(editText_count);
 
-            String t = (editText_time.getText().toString().isEmpty() ? editText_time.getHint().toString() : editText_time.getText().toString());
-            String c = (editText_count.getText().toString().isEmpty() ? editText_count.getHint().toString() : editText_count.getText().toString());
-            String s = (editText_size.getText().toString().isEmpty() ? editText_size.getHint().toString() : editText_size.getText().toString());
-            int time = Integer.parseInt(t);
-            int count = Integer.parseInt(c);
-            int size = Integer.parseInt(s);
-            if(time < timeMin || time > timeMax){
-                editText_time.setError("Time should be between "+timeMin+" and "+timeMax);
-            } else if (count < countMin || count > countMax){
-                editText_count.setError("Count should be between "+countMin+" and "+countMax);
-            } else if (size < sizeMin|| size > sizeMax){
-                editText_size.setError("Size should be between "+sizeMin+" and "+sizeMax);
-            } else {
-                sharedPreferences.edit().putInt("time", time).apply();
-                sharedPreferences.edit().putInt("count", count).apply();
-                sharedPreferences.edit().putInt("size", size).apply();
-                finish();
-                Toast.makeText(this, "Settings saved", Toast.LENGTH_SHORT).show();
-            }
-        } catch (Exception ex){
-            System.out.println("Exception converting inout data into Integers");
+        if(checkValues(editText_time, "Time", time, 50, 2000, "ms") &&
+                checkValues(editText_rounds, "Rounds", rounds, 5, 20, "") &&
+                checkValues(editText_size, "Size", size, 1, 10, "") &&
+                checkValues(editText_width, "Width", width, 10, 100, "%") &&
+                checkValues(editText_count, "Count", count, 1, 5, "")){
+            SharedPreferences sharedPreferences = getSharedPreferences("db", Context.MODE_PRIVATE);
+            sharedPreferences.edit().putInt("time", time).apply();
+            sharedPreferences.edit().putInt("rounds", rounds).apply();
+            sharedPreferences.edit().putInt("size", size).apply();
+            sharedPreferences.edit().putInt("width", width).apply();
+            sharedPreferences.edit().putInt("count", count).apply();
+            finish();
+            Toast.makeText(this, "Settings saved", Toast.LENGTH_SHORT).show();
         }
     }
+
+    private EditText initialize(String editTextId, String dbName, String dbKey, int dbDefault) {
+        EditText editText = null;
+        try {
+            editText = findViewById(R.id.class.getField(editTextId).getInt(null));
+            SharedPreferences sharedPreferences = getSharedPreferences(dbName, Context.MODE_PRIVATE);
+            editText.setHint(String.valueOf(sharedPreferences.getInt(dbKey, dbDefault)));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return editText;
+    }
+
+    private int getValue(EditText editText){
+        try {
+            String s = (editText.getText().toString().isEmpty() ? editText.getHint().toString() : editText.getText().toString());
+            return Integer.parseInt(s);
+        } catch (Exception e){
+            return 0;
+        }
+    }
+
+    private boolean checkValues(EditText editText, String name, int value, int min, int max, String unit){
+        if(value < min || value > max){
+            editText.setError(name+" should be between "+min+unit+" and "+max+unit);
+            return false;
+        } else {
+            return true;
+        }
+    }
+
 }

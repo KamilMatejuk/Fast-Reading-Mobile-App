@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Settings">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
     <TextView
         android:id="@+id/textview_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="Time visible (ms)"
+        android:text="@string/set_time"
         android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -30,18 +34,18 @@
         app:layout_constraintTop_toBottomOf="@+id/textview_time" />
 
     <TextView
-        android:id="@+id/textView_count"
+        android:id="@+id/textView_rounds"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:textSize="25sp"
-        android:text="How many times in round"
+        android:text="@string/set_rounds"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editText_time" />
 
     <EditText
-        android:id="@+id/editText_count"
+        android:id="@+id/editText_rounds"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="5"
@@ -50,7 +54,7 @@
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_count"/>
+        app:layout_constraintTop_toBottomOf="@+id/textView_rounds"/>
 
     <TextView
         android:id="@+id/textView_size"
@@ -58,10 +62,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:textSize="25sp"
-        android:text="How big words (digits)"
+        android:text="@string/set_size"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText_count" />
+        app:layout_constraintTop_toBottomOf="@+id/editText_rounds" />
 
     <EditText
         android:id="@+id/editText_size"
@@ -75,14 +79,65 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_size"/>
 
+    <TextView
+        android:id="@+id/textView_width"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:textSize="25sp"
+        android:text="@string/set_width"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText_size" />
+
+    <EditText
+        android:id="@+id/editText_width"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="5"
+        android:inputType="number"
+        android:textSize="20sp"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_width"/>
+
+    <TextView
+        android:id="@+id/textView_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:textSize="25sp"
+        android:text="@string/set_count"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText_width" />
+
+    <EditText
+        android:id="@+id/editText_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="5"
+        android:inputType="number"
+        android:textSize="20sp"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_count"/>
+
     <Button
         android:id="@+id/save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/save"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText_size"
+        app:layout_constraintTop_toBottomOf="@+id/editText_count"
         android:onClick="save"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

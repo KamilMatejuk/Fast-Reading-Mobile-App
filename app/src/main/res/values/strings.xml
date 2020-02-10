@@ -1,9 +1,21 @@
 <resources>
     <string name="app_name">Fast Reading</string>
+
+    <!--manu buttons-->
     <string name="btn1">Speed</string>
     <string name="btn2">Width</string>
-    <string name="btn3">Observation</string>
+    <string name="btn3">Reflex</string>
+    <string name="btn4">Observation</string>
     <string name="set">Settings</string>
+
+    <!--settings texts-->
     <string name="save">Save</string>
+    <string name="set_time">Time visible (ms)</string>
+    <string name="set_rounds">How many times in round</string>
+    <string name="set_size">How big words (digits)</string>
+    <string name="set_width">How wide spread words (%)</string>
+    <string name="set_count">How many words at once</string>
+
+    <!--general usage-->
     <string name="emptyHint">....</string>
 </resources>

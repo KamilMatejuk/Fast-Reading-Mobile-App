@@ -13,6 +13,9 @@ import com.example.fastreading.trening.Width;
 
 public class Menu extends AppCompatActivity {
 
+    //todo dodac powiadomienia o codziennym treningu
+    //todo zrobic posiomy zamiast ustawien
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +34,13 @@ public class Menu extends AppCompatActivity {
     }
 
     public void btn3(View view) {
-        //observation - coraz bardziej rozwalone po ekranie (góra, dół, prawo, lewo)
+        //reflex - jeden wyraz, ale nie wiadomo gdzie sie pojawi na ekranie
+        //startActivity(new Intent(this, Reflex.class));
+        Toast.makeText(getApplicationContext(), "Not implemented yet", Toast.LENGTH_SHORT).show();
+    }
+
+    public void btn4(View view) {
+        //observation - pare wyrazow coraz bardziej rozwalone po ekranie (góra, dół, prawo, lewo)
         //startActivity(new Intent(this, Observation.class));
         Toast.makeText(getApplicationContext(), "Not implemented yet", Toast.LENGTH_SHORT).show();
     }
