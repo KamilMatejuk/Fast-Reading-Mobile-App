@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Fast Reading</string>
+    <string name="btn1">Speed</string>
+    <string name="btn2">Width</string>
+    <string name="btn3">Observation</string>
+    <string name="set">Settings</string>
+    <string name="save">Save</string>
+    <string name="emptyHint">....</string>
+</resources>
