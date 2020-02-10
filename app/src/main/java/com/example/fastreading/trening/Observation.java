@@ -18,4 +18,9 @@ public class Observation extends AbstractTrening {
 
     }
 
+    @Override
+    protected void startTest() {
+        testForLandscapeLayout();
+    }
+
 }

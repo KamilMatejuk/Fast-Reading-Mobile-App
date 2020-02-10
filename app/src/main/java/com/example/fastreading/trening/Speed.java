@@ -23,4 +23,9 @@ public class Speed extends AbstractTrening {
         givenNumbers.add(String.valueOf(num));
         textView.setText(String.valueOf(num));
     }
+
+    @Override
+    protected void startTest() {
+        testForPortraitLayout();
+    }
 }

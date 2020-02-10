@@ -28,6 +28,7 @@ public abstract class AbstractTrening extends AppCompatActivity {
 
     protected abstract void textChanged(CharSequence s); // wyłapywanie kiedy klient skończył wpisywać
     protected abstract void newText(); // wyswietlanie tekstu
+    protected abstract void startTest();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +96,7 @@ public abstract class AbstractTrening extends AppCompatActivity {
         }.start();
     }
 
-    private void startTest() {
+    public void testForPortraitLayout() {
         userAnswers = new ArrayList<>();
         givenNumbers = new ArrayList<>();
         new Thread() {
@@ -117,6 +118,48 @@ public abstract class AbstractTrening extends AppCompatActivity {
                         });
                         while(waitingForInput){}
                         waitingForInput = true;
+                    }
+                    finishTest();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
+    }
+
+    public void testForLandscapeLayout() {
+        //main dofference is that a keyboard is hidden and opened every time with a new word
+        userAnswers = new ArrayList<>();
+        givenNumbers = new ArrayList<>();
+        final int keyboardDelay = 150;
+        editText.setEnabled(false);
+        new Thread() {
+            public void run() {
+                try {
+                    for(int i=0; i<rounds; i++){
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                newText();
+                            }
+                        });
+                        Thread.sleep(time + keyboardDelay);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                textView.setText(" ");
+                                editText.setEnabled(true);
+                            }
+                        });
+                        while(waitingForInput){}
+                        waitingForInput = true;
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                editText.setEnabled(false);
+                            }
+                        });
+                        Thread.sleep(keyboardDelay);
                     }
                     finishTest();
                 } catch (InterruptedException e) {

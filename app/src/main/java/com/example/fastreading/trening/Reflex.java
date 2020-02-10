@@ -17,4 +17,9 @@ public class Reflex extends AbstractTrening {
     protected void newText() {
 
     }
+
+    @Override
+    protected void startTest() {
+        testForPortraitLayout();
+    }
 }

@@ -29,8 +29,8 @@ public class Menu extends AppCompatActivity {
 
     public void btn2(View view) {
         //width - coraz bardziej rozwalone po ekranie  w jednej linii
-        //startActivity(new Intent(this, Width.class));
-        Toast.makeText(getApplicationContext(), "Not implemented yet", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(this, Width.class));
+//        Toast.makeText(getApplicationContext(), "Not implemented yet", Toast.LENGTH_SHORT).show();
     }
 
     public void btn3(View view) {
