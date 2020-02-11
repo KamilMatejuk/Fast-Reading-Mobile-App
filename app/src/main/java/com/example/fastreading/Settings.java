@@ -46,6 +46,8 @@ public class Settings extends AppCompatActivity {
 
     private final static int MY_PERMISSIONS_REQUEST_WAKE_LOCK = 0;
     int millis, interval;
+    PendingIntent pendingNotificationIntent;
+    AlarmManager alarmManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,11 +110,11 @@ public class Settings extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WAKE_LOCK}, MY_PERMISSIONS_REQUEST_WAKE_LOCK);
         } else {
             Intent myIntent = new Intent(this, Reciever.class);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast
+            pendingNotificationIntent = PendingIntent.getBroadcast
                     (getApplicationContext(), 2, myIntent , PendingIntent.FLAG_UPDATE_CURRENT);
-            AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+            alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,  millis,
-                    interval, pendingIntent);
+                    interval, pendingNotificationIntent);
         }
 
     }
@@ -124,11 +126,11 @@ public class Settings extends AppCompatActivity {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // permission was granted, yay!
                     Intent myIntent = new Intent(this, Reciever.class);
-                    PendingIntent pendingIntent = PendingIntent.getBroadcast
+                    pendingNotificationIntent = PendingIntent.getBroadcast
                             (getApplicationContext(), 2, myIntent , PendingIntent.FLAG_UPDATE_CURRENT);
-                    AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+                    alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
                     alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,  millis,
-                            interval, pendingIntent);
+                            interval, pendingNotificationIntent);
                 } else {
                     // permission denied, boo!
                 }
@@ -145,7 +147,9 @@ public class Settings extends AppCompatActivity {
     private void deleteNotification() {
         SharedPreferences sharedPreferences = getSharedPreferences("db", Context.MODE_PRIVATE);
         sharedPreferences.edit().remove("alarm").apply();
-        //TODO wyłączyć powiadomienia
+        if(alarmManager!=null && pendingNotificationIntent!=null) {
+            alarmManager.cancel(pendingNotificationIntent);
+        }
     }
 
     public void save(View view) {
