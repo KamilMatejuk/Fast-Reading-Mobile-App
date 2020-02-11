@@ -13,6 +13,7 @@ import com.example.fastreading.external.ObjectSerializer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 
 public class Results extends AppCompatActivity {
 
@@ -50,7 +51,7 @@ public class Results extends AppCompatActivity {
                 incorrect++;
             }
         }
-        s = "<br>"+ ((int) 100*((double)correct)/(correct+incorrect)) + "%<br><br>" + s;
+        s = "<br>"+ (int) (100*((double)correct)/(correct+incorrect)) + "%<br><br>" + s;
 
         save(correct, incorrect);
 
@@ -60,25 +61,29 @@ public class Results extends AppCompatActivity {
 
     private void save(int correct, int incorrect) {
         SharedPreferences sharedPreferences = getSharedPreferences("db", Context.MODE_PRIVATE);
+
         ArrayList<SavingRecord> savings = (ArrayList<SavingRecord>) ObjectSerializer.deserialize(
                 sharedPreferences.getString("savings", null));
 
-        System.out.println("savings: "+savings);
-
         if(savings != null){
-            //todo dodanie nowego dnia, albo do dzisiejszego
-            System.out.println(savings.get(0).getDate());
+            if(savings.get(savings.size()-1).isToday()){
+                savings.get(savings.size()-1).addCorrect(correct);
+                savings.get(savings.size()-1).addInorrect(incorrect);
+            } else {
+                SavingRecord todays = new SavingRecord();
+                todays.addCorrect(correct);
+                todays.addInorrect(incorrect);
+                savings.add(todays);
+            }
         } else {
             savings = new ArrayList<>();
             SavingRecord todays = new SavingRecord();
             todays.addCorrect(correct);
             todays.addInorrect(incorrect);
             savings.add(todays);
-
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString("savings", ObjectSerializer.serialize(savings)).apply();
         }
-
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("savings", ObjectSerializer.serialize(savings)).apply();
     }
 
 }

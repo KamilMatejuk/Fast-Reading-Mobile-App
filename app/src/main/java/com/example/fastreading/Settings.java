@@ -1,15 +1,25 @@
 package com.example.fastreading;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
+import android.app.SearchManager;
+import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.PopupMenu;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
+
+import java.util.Calendar;
 
 public class Settings extends AppCompatActivity {
 
@@ -29,6 +39,55 @@ public class Settings extends AppCompatActivity {
         editText_size = initialize("editText_size", "db", "size", 2);
         editText_width = initialize("editText_width", "db", "width", 20);
         editText_count = initialize("editText_count", "db", "count", 1);
+
+        addSwitchListener();
+    }
+
+    private void addSwitchListener() {
+        final Switch switchbtn = findViewById(R.id.switch_notifications);
+        SharedPreferences sharedPreferences = getSharedPreferences("db", Context.MODE_PRIVATE);
+        String alarm = sharedPreferences.getString("alarm", "none");
+        switchbtn.setChecked(!alarm.equals("none"));
+        System.out.println(alarm);
+
+        switchbtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(final CompoundButton compoundButton, boolean isChecked) {
+                if(isChecked){
+                    Calendar mcurrentTime = Calendar.getInstance();
+                    int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+                    int minute = mcurrentTime.get(Calendar.MINUTE);
+                    TimePickerDialog mTimePicker = new TimePickerDialog(Settings.this, new TimePickerDialog.OnTimeSetListener() {
+                        @Override
+                        public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                            System.out.println( selectedHour + ":" + selectedMinute);
+                            saveNotification(selectedHour, selectedMinute);
+                            //todo dodać faktyczny alarm (jezeli do tej godziny tego dnia nie zostalo wyrobiona wymagana ilosc
+                        }
+                    }, hour, minute, true);
+                    mTimePicker.setOnCancelListener(new DialogInterface.OnCancelListener(){
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                            switchbtn.setChecked(false);
+                        }
+                    });
+                    mTimePicker.setTitle("Select Time");
+                    mTimePicker.show();
+                } else {
+                    deleteNotification();
+                }
+            }
+        });
+    }
+
+    private void saveNotification(int selectedHour, int selectedMinute) {
+        SharedPreferences sharedPreferences = getSharedPreferences("db", Context.MODE_PRIVATE);
+        String alarm = selectedHour+":"+selectedMinute;
+        sharedPreferences.edit().putString("alarm", alarm).apply();
+    }
+
+    private void deleteNotification() {
+        SharedPreferences sharedPreferences = getSharedPreferences("db", Context.MODE_PRIVATE);
+        sharedPreferences.edit().remove("alarm").apply();
     }
 
     public void save(View view) {
@@ -85,4 +144,6 @@ public class Settings extends AppCompatActivity {
         }
     }
 
+    public void changeNotificationTime(View view) {
+    }
 }

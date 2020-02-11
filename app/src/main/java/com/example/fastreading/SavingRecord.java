@@ -1,13 +1,15 @@
 package com.example.fastreading;
 
+import android.text.format.DateUtils;
+
 import java.io.Serializable;
 import java.util.Date;
 
 public class SavingRecord implements Serializable {
 
-    Date date;
-    int correct;
-    int incorrect;
+    private Date date;
+    private int correct;
+    private int incorrect;
 
     public SavingRecord(){
         this.date = new Date();
@@ -27,7 +29,15 @@ public class SavingRecord implements Serializable {
         return this.date;
     }
 
+    public boolean isToday(){
+        return DateUtils.isToday(this.date.getTime());
+    }
+
     public int getPercentage(){
         return 100*correct/(correct+incorrect);
+    }
+
+    public int getCount(){
+        return (this.correct + this.incorrect);
     }
 }

@@ -7,6 +7,7 @@
     <string name="btn3">Reflex</string>
     <string name="btn4">Observation</string>
     <string name="set">Settings</string>
+    <string name="history">History</string>
 
     <!--settings texts-->
     <string name="save">Save</string>
@@ -15,7 +16,12 @@
     <string name="set_size">How big words (digits)</string>
     <string name="set_width">How wide spread words (%)</string>
     <string name="set_count">How many words at once</string>
+    <string name="set_notify">Daily notifications</string>
+
+    <!--history texts-->
+    <string name="empty_hist">No records to show</string>
+    <string name="reset">Reset history</string>
 
     <!--general usage-->
-    <string name="emptyHint">....</string>
+    <string name="empty_hint">....</string>
 </resources>
