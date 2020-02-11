@@ -1,14 +1,26 @@
 package com.example.fastreading;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
+import android.Manifest;
+import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.SearchManager;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -19,6 +31,9 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.fastreading.notifications.Reciever;
+
+import java.security.KeyStore;
 import java.util.Calendar;
 
 public class Settings extends AppCompatActivity {
@@ -28,6 +43,9 @@ public class Settings extends AppCompatActivity {
     EditText editText_size;
     EditText editText_width;
     EditText editText_count;
+
+    private final static int MY_PERMISSIONS_REQUEST_WAKE_LOCK = 0;
+    int millis, interval;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +79,7 @@ public class Settings extends AppCompatActivity {
                         public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                             System.out.println( selectedHour + ":" + selectedMinute);
                             saveNotification(selectedHour, selectedMinute);
-                            //todo dodać faktyczny alarm (jezeli do tej godziny tego dnia nie zostalo wyrobiona wymagana ilosc
+                            createSystemNotifications(selectedHour, selectedMinute);
                         }
                     }, hour, minute, true);
                     mTimePicker.setOnCancelListener(new DialogInterface.OnCancelListener(){
@@ -79,6 +97,45 @@ public class Settings extends AppCompatActivity {
         });
     }
 
+    private void createSystemNotifications(int selectedHour, int selectedMinute) {
+
+        millis = 1000 * (60*60*selectedHour + 60*selectedMinute);
+        interval = 1000 * 60 * 60 * 24; //24h
+
+        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.WAKE_LOCK);
+
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WAKE_LOCK}, MY_PERMISSIONS_REQUEST_WAKE_LOCK);
+        } else {
+            Intent myIntent = new Intent(this, Reciever.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast
+                    (getApplicationContext(), 2, myIntent , PendingIntent.FLAG_UPDATE_CURRENT);
+            AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,  millis,
+                    interval, pendingIntent);
+        }
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_WAKE_LOCK: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted, yay!
+                    Intent myIntent = new Intent(this, Reciever.class);
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast
+                            (getApplicationContext(), 2, myIntent , PendingIntent.FLAG_UPDATE_CURRENT);
+                    AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+                    alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,  millis,
+                            interval, pendingIntent);
+                } else {
+                    // permission denied, boo!
+                }
+            }
+        }
+    }
+
     private void saveNotification(int selectedHour, int selectedMinute) {
         SharedPreferences sharedPreferences = getSharedPreferences("db", Context.MODE_PRIVATE);
         String alarm = selectedHour+":"+selectedMinute;
@@ -88,6 +145,7 @@ public class Settings extends AppCompatActivity {
     private void deleteNotification() {
         SharedPreferences sharedPreferences = getSharedPreferences("db", Context.MODE_PRIVATE);
         sharedPreferences.edit().remove("alarm").apply();
+        //TODO wyłączyć powiadomienia
     }
 
     public void save(View view) {

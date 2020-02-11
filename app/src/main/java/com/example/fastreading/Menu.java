@@ -2,7 +2,10 @@ package com.example.fastreading;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -13,13 +16,27 @@ import com.example.fastreading.trening.Width;
 
 public class Menu extends AppCompatActivity {
 
-    //todo dodac powiadomienia o codziennym treningu
     //todo zrobic posiomy zamiast ustawien
+
+    private static final String CHANNEL_ID = "Channel_id";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menu);
+        
+        createChannelForNotifications();
+    }
+
+    private void createChannelForNotifications() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.channel_name);
+            String description = getString(R.string.channel_description);
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setDescription(description);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 
     public void btn1(View view) {
