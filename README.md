@@ -23,7 +23,7 @@ The goal is to train eye to collect data in smaller and smaller time windows.
 Like the previous exercise, here are shown numbers for some small time. But this time, there are two numbers on the screen at the same time, but separated. The space between them is configurable, and widening it helps to widen seeing range of our eyes.
 
 ### Reflex
-(in process of implementing)
+(in process of implementing)\n
 Similar to first exercise, there is only one number on the screen at the time. The difference is in first exercise you allways know where the number is gonna appear - in the middle. Here the number is showing at some random place on screen. This exersice helps widening seeing range as well, but in both axis - horizontally and vertically.
 
 ### Observation
