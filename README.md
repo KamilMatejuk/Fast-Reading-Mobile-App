@@ -1,6 +1,8 @@
 # Fast Reading
 Mobile app to help speeding up reading. Contains multiple different exercises to help accomodate eyes to fast reading.
 
+![](app-overview.png)
+
 ## Functionalities
 
 * [Exercises](#exercises)
@@ -32,4 +34,3 @@ The app provides a way to track your progress. In history tab, there is stored d
 ## Configurability
 The power of this app lays here. You fully controll how long the numbers are shown (default 0.2s), how many tries are in one round (defalut 20), how many digits numbers have, and how much are they spread across screen.
 
-![](app-overview.png)
